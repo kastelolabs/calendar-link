@@ -21,7 +21,8 @@
     "test-watch": "jest --watch",
     "coverage": "jest --coverage",
     "update-template": "npx update-template https://github.com/AnandChowdhary/calendar-link",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
