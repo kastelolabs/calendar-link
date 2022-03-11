@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import * as dayjs from "dayjs";
 
 interface CalendarEvent {
   title: string;
@@ -55,6 +55,7 @@ interface Yahoo extends Record<string, string | boolean | number | undefined> {
   et: string;
   desc?: string;
   in_loc?: string;
+  dur?: string | boolean;
 }
 
 export { CalendarEvent, CalendarEventOrganizer, NormalizedCalendarEvent, Outlook, Yahoo, Google };

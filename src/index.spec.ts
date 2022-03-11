@@ -96,7 +96,7 @@ describe("Calendar Links", () => {
       const eTime: String = dayjs(event.start).add(2, "hour").utc().format(TimeFormats.dateTimeUTC);
 
       expect(link).toBe(
-        `https://calendar.yahoo.com/?et=${eTime}&st=${sTime}&title=Birthday%20party&v=60`
+        `https://calendar.yahoo.com/?dur=false&et=${eTime}&st=${sTime}&title=Birthday%20party&v=60`
       );
     });
 
@@ -111,7 +111,7 @@ describe("Calendar Links", () => {
       const eTime: String = dayjs(event.start).add(1, "day").utc().format(TimeFormats.allDay);
 
       expect(link).toBe(
-        `https://calendar.yahoo.com/?et=${eTime}&st=${sTime}&title=Birthday%20party&v=60`
+        `https://calendar.yahoo.com/?dur=allday&et=${eTime}&st=${sTime}&title=Birthday%20party&v=60`
       );
     });
   });
@@ -125,7 +125,7 @@ describe("Calendar Links", () => {
       const link = outlook(event);
 
       expect(link).toBe(
-        "https://outlook.live.com/calendar/0/deeplink/compose?enddt=2019-12-29T02%3A00%3A00%2B00%3A00&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2019-12-29T00%3A00%3A00%2B00%3A00&subject=Birthday%20party"
+        "https://outlook.live.com/calendar/0/deeplink/compose?allday=false&enddt=2019-12-29T02%3A00%3A00%2B00%3A00&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2019-12-29T00%3A00%3A00%2B00%3A00&subject=Birthday%20party"
       );
     });
 
@@ -136,9 +136,11 @@ describe("Calendar Links", () => {
         allDay: true,
       };
       const link = outlook(event);
+      const sTime: String = dayjs(event.start).utc().format(TimeFormats.allDay);
+      const eTime: String = dayjs(event.start).add(1, "day").utc().format(TimeFormats.allDay);
 
       expect(link).toBe(
-        "https://outlook.live.com/calendar/0/deeplink/compose?enddt=20191230&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=20191229&subject=Birthday%20party"
+        `https://outlook.live.com/calendar/0/deeplink/compose?allday=true&enddt=${eTime}&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=${sTime}&subject=Birthday%20party`
       );
     });
   });
@@ -153,20 +155,22 @@ describe("Calendar Links", () => {
       const link = office365(event);
 
       expect(link).toBe(
-        "https://outlook.office.com/calendar/0/deeplink/compose?enddt=2019-12-29T02%3A00%3A00%2B00%3A00&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2019-12-29T00%3A00%3A00%2B00%3A00&subject=Birthday%20party"
+        "https://outlook.office.com/calendar/0/deeplink/compose?allday=false&enddt=2019-12-29T02%3A00%3A00%2B00%3A00&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2019-12-29T00%3A00%3A00%2B00%3A00&subject=Birthday%20party"
       );
     });
 
     test("generate an all day office365 link", () => {
       const event: CalendarEvent = {
         title: "Birthday party",
-        start: "2019-12-29Z",
+        start: "2019-12-29",
         allDay: true,
       };
       const link = office365(event);
+      const sTime: String = dayjs(event.start).utc().format(TimeFormats.allDay);
+      const eTime: String = dayjs(event.start).add(1, "day").utc().format(TimeFormats.allDay);
 
       expect(link).toBe(
-        "https://outlook.office.com/calendar/0/deeplink/compose?enddt=20191230&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=20191229&subject=Birthday%20party"
+        `https://outlook.office.com/calendar/0/deeplink/compose?allday=true&enddt=${eTime}&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=${sTime}&subject=Birthday%20party`
       );
     });
   });
@@ -283,7 +287,7 @@ describe("Calendar Links", () => {
 
       const link = ics(event);
       expect(link).toBe(
-          `data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:20191229T050000Z%0ADTEND:20191231T050000Z%0ASUMMARY:Birthday%20party%0AORGANIZER;CN%3DJohn%20Doe%3AMAILTO%3Ajohn.doe%40example.com%0AEND:VEVENT%0AEND:VCALENDAR%0A`
+          `data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ADTSTART:${sTime}%0ADTEND:${eTime}%0ASUMMARY:Birthday%20party%0AORGANIZER;CN%3DJohn%20Doe%3AMAILTO%3Ajohn.doe%40example.com%0AEND:VEVENT%0AEND:VCALENDAR%0A`
       );
     });
   });
