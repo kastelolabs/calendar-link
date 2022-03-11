@@ -8,7 +8,7 @@ import { TimeFormats } from "./utils";
 dayjs.extend(utc);
 
 function formatTimes(
-  { allDay, startUtc, endUtc }: NormalizedCalendarEvent,
+  { startUtc, endUtc }: NormalizedCalendarEvent,
   dateTimeFormat: keyof typeof TimeFormats
 ): { start: string; end: string } {
   const format = TimeFormats[dateTimeFormat];
@@ -57,7 +57,7 @@ export const google = (calendarEvent: CalendarEvent): string => {
 
 export const outlook = (calendarEvent: CalendarEvent): string => {
   const event = eventify(calendarEvent);
-  const { start, end } = formatTimes(event, "dateTimeWithOffset");
+  const { start, end } = formatTimes(event, event.allDay ? "allDay" : "dateTimeWithOffset");
   const details: Outlook = {
     path: "/calendar/action/compose",
     rru: "addevent",
@@ -73,7 +73,7 @@ export const outlook = (calendarEvent: CalendarEvent): string => {
 
 export const office365 = (calendarEvent: CalendarEvent): string => {
   const event = eventify(calendarEvent);
-  const { start, end } = formatTimes(event, "dateTimeWithOffset");
+  const { start, end } = formatTimes(event, event.allDay ? "allDay" : "dateTimeWithOffset");
   const details: Outlook = {
     path: "/calendar/action/compose",
     rru: "addevent",
